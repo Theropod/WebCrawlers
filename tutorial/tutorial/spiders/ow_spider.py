@@ -8,7 +8,7 @@ class QuotesSpider(scrapy.Spider):
     # item = MyItem()
     name = "ow"
     start_urls = [
-        'file:///E:/CAU/大三下/统计分析与建模/scrapy4ow/OwKorea_files/OwKorea.html',
+        'file:///E:/CAU/大三下/统计分析与建模/scrapy4ow/OwKorea_Score_files/OwKorea_Score.html',
     ]
     def parse(self, response):
         flag=0
@@ -76,6 +76,8 @@ class QuotesSpider(scrapy.Spider):
             if(heronumber==0):
                     # 没有的数据会是一条'-'，换成0
                     item['Hero1']=heroes.css('div.card-hero-name').css('strong::text').extract_first()
+                    item['H1MatchPlayed']=int(heroes.css('span.card-games::text').extract_first().split(' ')[0]
+                                         if heroes.css('span.card-games::text').extract_first() is not None else '0')
                     item['H1ElmPerMnt']=float(heroes.css('div.stats-bar-percentile')[0].css('div.bar-value::text').extract_first()
                                          if heroes.css('div.stats-bar-percentile')[0].css('div.bar-value::text').extract_first() is not None else '0')
                     item['H1KD']=float(heroes.css('div.stats-bar-percentile')[1].css('div.bar-value::text').extract_first()
@@ -93,6 +95,8 @@ class QuotesSpider(scrapy.Spider):
                                       if heroes.css('div.stats-bar-percentile')[8].css('div.bar-value::text').extract_first() is not None else '0')
             elif(heronumber==1):
                     item['Hero2']=heroes.css('div.card-hero-name').css('strong::text').extract_first()
+                    item['H2MatchPlayed']=int(heroes.css('span.card-games::text').extract_first().split(' ')[0]
+                                         if heroes.css('span.card-games::text').extract_first() is not None else '0')
                     item['H2ElmPerMnt']=float(heroes.css('div.stats-bar-percentile')[0].css('div.bar-value::text').extract_first()
                                          if heroes.css('div.stats-bar-percentile')[0].css('div.bar-value::text').extract_first() is not None else '0')
                     item['H2KD']=float(heroes.css('div.stats-bar-percentile')[1].css('div.bar-value::text').extract_first()
@@ -109,6 +113,8 @@ class QuotesSpider(scrapy.Spider):
                                       if heroes.css('div.stats-bar-percentile')[8].css('div.bar-value::text').extract_first() is not None else '0')
             else:
                     item['Hero3']=heroes.css('div.card-hero-name').css('strong::text').extract_first()
+                    item['H3MatchPlayed']=int(heroes.css('span.card-games::text').extract_first().split(' ')[0]
+                                         if heroes.css('span.card-games::text').extract_first() is not None else '0')
                     item['H3ElmPerMnt']=float(heroes.css('div.stats-bar-percentile')[0].css('div.bar-value::text').extract_first()
                                          if heroes.css('div.stats-bar-percentile')[0].css('div.bar-value::text').extract_first() is not None else '0')
                     item['H3KD']=float(heroes.css('div.stats-bar-percentile')[1].css('div.bar-value::text').extract_first()
