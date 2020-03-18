@@ -1,4 +1,3 @@
 # ScrapyforOW
-- My Scray Application to get player information from masteroverwatch.com
-- Needed packages: scrapy mysqlclient pywin32
-- My first python application, had a hard time to make it work...
+- Scrapy scripts to get player information from masteroverwatch.com and store that into mysql db
+- Used packages: scrapy mysqlclient pywin32
