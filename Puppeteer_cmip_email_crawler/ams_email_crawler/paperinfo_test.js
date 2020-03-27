@@ -4,6 +4,9 @@ const puppeteer = require('puppeteer');
     const page = await browser.newPage();
 
     const paperTitleLinks = [{
+        paperTitle: 'State of the Climate in 2017',
+        paperLink: 'https://journals.ametsoc.org/doi/abs/10.1175/2018BAMSStateoftheClimate.1'
+    },{
         paperTitle: 'Atlantic Warm Pool Variability in the CMIP5 Simulations',
         paperLink: 'https://journals.ametsoc.org/doi/abs/10.1175/JCLI-D-12-00556.1'
     },

@@ -31,11 +31,8 @@ const outfile = 'email_crawled.csv';
     const page = await browser.newPage();
     // 'cmip5' cmip6' search result pages of ametsoc journals
     const paperSearchURLs = [
-        'https://journals.ametsoc.org/action/doSearch?AllField=cmip5&pageSize=500&startPage=0',
-        'https://journals.ametsoc.org/action/doSearch?AllField=cmip5&pageSize=500&startPage=1',
-        'https://journals.ametsoc.org/action/doSearch?AllField=cmip5&pageSize=500&startPage=2',
-        'https://journals.ametsoc.org/action/doSearch?AllField=cmip5&pageSize=500&startPage=3',
-        'https://journals.ametsoc.org/action/doSearch?AllField=cmip6&pageSize=500&startPage=0',
+        'https://journals.ametsoc.org/action/doSearch?AllField=esgf&pageSize=100&startPage=0&sortBy=Ppub',
+        'https://journals.ametsoc.org/action/doSearch?AllField=cmip6&pageSize=300&startPage=0&sortBy=Ppub',
     ];
 
     // deal with unhandled promise rejections, or node.js would warned it
@@ -57,11 +54,12 @@ const outfile = 'email_crawled.csv';
 
         //getting paper title and link
         let titleSelector = 'a.hlFld-Title';
-        await page.waitForSelector(titleSelector);
         let paperTitleLinks = { 'paperTitle': 'N/A', 'paperLink': 'N/A' }
         try {
+            await page.waitForSelector(titleSelector);
             paperTitleLinks = await page.$$eval(titleSelector, elements => elements.map(element => {
-                return { 'paperTitle': element.innerHTML, 'paperLink': element.href.replace('full', 'abs') }
+                // in case paper title includes commas
+                return { 'paperTitle': '"' + element.innerHTML + '"', 'paperLink': element.href.replace('full', 'abs') }
             }));
         }
         catch (error) {
@@ -71,8 +69,8 @@ const outfile = 'email_crawled.csv';
         // for each pair of title and link, get author and email info
         for (let paperTitleLink of paperTitleLinks) {
             try {
-                // wait for 4 secs
-                await page.waitFor(4000)
+                // wait for 6 secs
+                await page.waitFor(6000)
                 await page.goto(paperTitleLink.paperLink);
                 console.log('page opened:', paperTitleLink.paperLink);
             } catch (error) {
@@ -82,12 +80,13 @@ const outfile = 'email_crawled.csv';
 
             //getting paper author and email
             let authorSelector = 'span.hlFld-ContribAuthor';
-            await page.waitForSelector(authorSelector);
             let author = 'N/A'
             try {
+                await page.waitForSelector(authorSelector);
                 author = await page.$$eval(authorSelector, elements => {
                     element = elements[0];
-                    return element.innerHTML;
+                    // in case of commas
+                    return '"' + element.innerHTML + '"';
                 });
             }
             catch (error) {
@@ -95,9 +94,9 @@ const outfile = 'email_crawled.csv';
             }
 
             let emailSelector = 'a.email';
-            await page.waitForSelector(emailSelector);
             let email = 'N/A'
             try {
+                await page.waitForSelector(emailSelector);
                 email = await page.$$eval(emailSelector, elements => {
                     element = elements[0];
                     return element.href.replace('mailto:', '');
