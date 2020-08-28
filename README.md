@@ -1,4 +1,4 @@
-# Web Crawlers Collection
+# Collection of my crawlers
 
 ## Puppeteer_cmip_email_crawler
 
